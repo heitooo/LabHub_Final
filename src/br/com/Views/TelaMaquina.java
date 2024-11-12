@@ -21,63 +21,79 @@ public class TelaMaquina extends javax.swing.JFrame {
     }
 
     public void pesquisarEquipamentoNormal() {
-        String sql = "select * from equipamento where id_equipamento = ?";
+        String sql = "select * from maquinas where id_maquina = ?";
 
         try {
             pst = conexao.prepareStatement(sql);
-            pst.setString(1, txtIdEquipamento.getText());
+            pst.setString(1, txtIdMaq.getText());
             rs = pst.executeQuery();
 
-        if (rs.next()) {
-            txtModelo.setText(rs.getString(2));
-            txtFabricante.setText(rs.getString(3));
-            txtNSerie.setText(rs.getString(4));
-            txtStatus.setText(rs.getString(5));
-            txtGarantia.setText(rs.getString(6));
-            
-        } else {
-                JOptionPane.showMessageDialog(null, "Usuario não cadastrado!");
+            if (rs.next()) {
+                txtNome.setText(rs.getString(3));
+                txtProcessador.setText(rs.getString(4));
+                txtRAM.setText(rs.getString(5));
+                txtArmazenamento.setText(rs.getString(6));
+                txtNSerie.setText(rs.getString(7));
+                txtData.setText(rs.getString(8));
+                txtStatus.setText(rs.getString(9));
+                txtIdLab.setText(rs.getString(2));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Máquina não cadastrada!");
             }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, " Metodo pesquisar " + e);
         }
     }
-    
-    
-    
-    public void pesquisarEquipamento() {
-        String sql = "select * from equipamento where id_equipamento = ?";
 
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setString(1, txtIdPesquisar.getText());
-            rs = pst.executeQuery();
+ public void pesquisarEquipamento() {
+    // Verifique o conteúdo do campo txtIdMaq antes de realizar a pesquisa
+    String idMaq = txtIdMaq.getText();
+    System.out.println("ID a ser pesquisada: " + idMaq); // Para debug
 
-            tbEquipamento.setModel(DbUtils.resultSetToTableModel(rs));
+    if (idMaq.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Digite um ID de máquina válido.");
+        return; // Não continua se o campo estiver vazio
+    }
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, " Metodo pesquisar " + e);
+    try {
+        int id = Integer.parseInt(idMaq); // Tentando converter a ID para inteiro
+
+        // SQL para buscar a máquina pelo ID
+        String sql = "SELECT * FROM maquinas WHERE id_maquina = ?";
+        pst = conexao.prepareStatement(sql);
+        pst.setInt(1, id); // Definindo o parâmetro como inteiro
+
+        rs = pst.executeQuery();
+
+        // Verifica se retornou algum dado
+        if (rs.next()) {
+            System.out.println("Máquina encontrada: " + rs.getString("nome")); // Exemplo de retorno
+            tbMaq.setModel(DbUtils.resultSetToTableModel(rs));
+        } else {
+            JOptionPane.showMessageDialog(null, "Máquina não encontrada com esse ID.");
         }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "ID inválido. Digite um número.");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao pesquisar equipamento: " + e.getMessage());
+        e.printStackTrace(); // Para depuração
     }
+}
 
-    public void setarCampos() {
-        int setar = tbEquipamento.getSelectedRow();
-        txtModelo.setText(tbEquipamento.getModel().getValueAt(setar, 1).toString());
-        txtFabricante.setText(tbEquipamento.getModel().getValueAt(setar, 2).toString());
-        txtNSerie.setText(tbEquipamento.getModel().getValueAt(setar, 3).toString());
-        txtStatus.setText(tbEquipamento.getModel().getValueAt(setar, 4).toString());
-        txtGarantia.setText(tbEquipamento.getModel().getValueAt(setar, 5).toString());
-    }
+
 
     public void limpar() {
-        txtFabricante.setText(null);
-        txtGarantia.setText(null);
-        txtIdEquipamento.setText(null);
-        txtModelo.setText(null);
-        txtStatus.setText(null);
+        txtIdMaq.setText(null);
+        txtNome.setText(null);
+        txtProcessador.setText(null);
+        txtRAM.setText(null);
+        txtArmazenamento.setText(null);
         txtNSerie.setText(null);
-        txtFabricante.setText(null);
+        txtData.setText(null);
+        txtStatus.setText(null);
+        txtIdLab.setText(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -93,22 +109,27 @@ public class TelaMaquina extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        txtModelo = new javax.swing.JTextField();
-        txtFabricante = new javax.swing.JTextField();
+        txtNome = new javax.swing.JTextField();
+        txtProcessador = new javax.swing.JTextField();
+        txtRAM = new javax.swing.JTextField();
+        txtArmazenamento = new javax.swing.JTextField();
         txtNSerie = new javax.swing.JTextField();
-        txtStatus = new javax.swing.JTextField();
-        txtGarantia = new javax.swing.JTextField();
         btnEditar = new javax.swing.JButton();
         btnAdicionar = new javax.swing.JButton();
         btnDeletar = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbEquipamento = new javax.swing.JTable();
-        jLabel7 = new javax.swing.JLabel();
-        txtIdPesquisar = new javax.swing.JTextField();
-        txtIdEquipamento = new javax.swing.JTextField();
+        txtIdMaq = new javax.swing.JTextField();
         btnPesquisarNormal = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        txtData = new javax.swing.JTextField();
+        txtStatus = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtIdLab = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbMaq = new javax.swing.JTable();
+        jTextField1 = new javax.swing.JTextField();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -125,68 +146,42 @@ public class TelaMaquina extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("ID do equipamento");
+        jLabel1.setText("ID da máquina");
 
-        jLabel2.setText("Modelo");
+        jLabel2.setText("Nome");
 
-        jLabel3.setText("Fabricante");
+        jLabel3.setText("Processador");
 
-        jLabel4.setText("N° de Serie");
+        jLabel4.setText("Memória RAM");
 
-        jLabel5.setText("Status");
+        jLabel5.setText("Armazenamento");
 
-        jLabel6.setText("Garantia");
+        jLabel6.setText("N° de série");
 
-        btnEditar.setText("editar");
+        btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
             }
         });
 
-        btnAdicionar.setText("adicionar");
+        btnAdicionar.setText("Adicionar");
         btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdicionarActionPerformed(evt);
             }
         });
 
-        btnDeletar.setText("deletar");
+        btnDeletar.setText("Deletar");
         btnDeletar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeletarActionPerformed(evt);
             }
         });
 
-        tbEquipamento.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID equipamento", "Modelo", "Fabricante", "N° de Serie", "Status", "Garantia"
-            }
-        ));
-        tbEquipamento.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbEquipamentoMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(tbEquipamento);
-
-        jLabel7.setText("Digite o id que voce quer pesquisar na tabela");
-
-        txtIdPesquisar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtIdPesquisarKeyReleased(evt);
-            }
-        });
-
-        txtIdEquipamento.addActionListener(new java.awt.event.ActionListener() {
+        txtIdMaq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdEquipamentoActionPerformed(evt);
+                txtIdMaqActionPerformed(evt);
             }
         });
 
@@ -211,96 +206,152 @@ public class TelaMaquina extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setText("Data aquisição");
+
+        jLabel9.setText("Status");
+
+        jLabel10.setText("ID do laboratório alocado");
+
+        txtIdLab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdLabActionPerformed(evt);
+            }
+        });
+
+        tbMaq.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID da máquina", "Nome", "Processador", "Memória RAM", "Armazenamento", "Número de série", "Data aquisição", "Status de funcionamento", "ID do laboratório"
+            }
+        ));
+        jScrollPane2.setViewportView(tbMaq);
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnEditar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAdicionar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnDeletar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnLimpar))
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtIdLab, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel4)
-                                    .addComponent(jLabel3))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel9))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtFabricante, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtModelo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNSerie, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtProcessador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtRAM, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtArmazenamento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
+                                .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtIdPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(83, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtIdEquipamento, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(btnPesquisarNormal)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtIdMaq, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(btnPesquisarNormal)))
+                        .addGap(396, 396, 396))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 860, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnVoltar)
-                        .addGap(35, 35, 35))))
+                        .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(240, 240, 240)
+                .addComponent(btnAdicionar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnEditar)
+                .addGap(18, 18, 18)
+                .addComponent(btnDeletar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnLimpar)
+                .addGap(54, 54, 54)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addContainerGap()
+                .addComponent(btnVoltar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtIdEquipamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnPesquisarNormal)
-                        .addComponent(btnVoltar)))
+                        .addComponent(txtIdMaq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnPesquisarNormal)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtFabricante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtProcessador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtNSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtRAM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtArmazenamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtGarantia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtIdLab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar)
-                    .addComponent(btnAdicionar)
                     .addComponent(btnDeletar)
-                    .addComponent(btnLimpar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtIdPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
+                    .addComponent(btnLimpar)
+                    .addComponent(btnAdicionar)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(302, 302, 302))
         );
 
         pack();
@@ -308,42 +359,54 @@ public class TelaMaquina extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        String id_equipamento = txtIdEquipamento.getText();
-        String modelo = txtModelo.getText();
-        String fabricante = txtFabricante.getText();
+        String id_lab = txtIdLab.getText();
+        String nome = txtNome.getText();
+        String processador = txtProcessador.getText();
+        String ram = txtRAM.getText();
+        String armazenamento = txtArmazenamento.getText();
         String numeroSerie = txtNSerie.getText();
-        String statusEquipamento = txtStatus.getText();
-        String garantia = txtGarantia.getText();
+        String data = txtData.getText();
+        String statusMaq = txtStatus.getText();
+        String id_maq = txtIdMaq.getText();
 
         MaquinaDTO objDTO = new MaquinaDTO();
-        objDTO.setId_equipamento(Integer.parseInt(id_equipamento));
-        objDTO.setModelo(modelo);
-        objDTO.setFabricante(fabricante);
-        objDTO.setNumeroSerie(numeroSerie);
-        objDTO.setStatusEquipamento(statusEquipamento);
-        objDTO.setGarantia(garantia);
+        objDTO.setId_maquina(Integer.parseInt(id_maq));
+        objDTO.setNome(nome);
+        objDTO.setProcessador(processador);
+        objDTO.setMemoria_RAM(ram);
+        objDTO.setArmazenamento(armazenamento);
+        objDTO.setNumero_serie(numeroSerie);
+        objDTO.setData_aquisicao(data);
+        objDTO.setStatus(statusMaq);
+        objDTO.setId_laboratorio(Integer.parseInt(id_lab));
 
         MaquinaDAO objEquipamentoDAO = new MaquinaDAO();
-        objEquipamentoDAO.editarEquipamento(objDTO);
+        objEquipamentoDAO.editarMaquina(objDTO);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        String modelo = txtModelo.getText();
-        String fabricante = txtFabricante.getText();
-        String numeroSerie = txtNSerie.getText();
-        String statusEquipamento = txtStatus.getText();
-        String garantia = txtGarantia.getText();
+        String nome = txtNome.getText();
+        String processador = txtProcessador.getText();
+        String ram = txtRAM.getText();
+        String armazenamento = txtArmazenamento.getText();
+        String nSerie = txtNSerie.getText();
+        String data = txtData.getText();
+        String status = txtStatus.getText();
+        String id_lab = txtIdLab.getText();
 
         MaquinaDTO objDTO = new MaquinaDTO();
-        objDTO.id_equipamento = Integer.parseInt(txtIdEquipamento.getText());
-        objDTO.setModelo(modelo);
-        objDTO.setFabricante(fabricante);
-        objDTO.setNumeroSerie(numeroSerie);
-        objDTO.setStatusEquipamento(statusEquipamento);
-        objDTO.setGarantia(garantia);
+        objDTO.id_maquina = Integer.parseInt(txtIdMaq.getText());
+        objDTO.setNome(nome);
+        objDTO.setProcessador(processador);
+        objDTO.setMemoria_RAM(ram);
+        objDTO.setArmazenamento(armazenamento);
+        objDTO.setNumero_serie(nSerie);
+        objDTO.setData_aquisicao(data);
+        objDTO.setStatus(status);
+        objDTO.id_laboratorio = Integer.parseInt(id_lab);
 
         MaquinaDAO objEquipamentoDAO = new MaquinaDAO();
-        boolean inserir = objEquipamentoDAO.inserirEquipamento(objDTO);
+        boolean inserir = objEquipamentoDAO.inserirMaquina(objDTO);
 
         if (inserir) {
             JOptionPane.showMessageDialog(null, "O Equipamento foi inserido com sucesso ");
@@ -354,26 +417,18 @@ public class TelaMaquina extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
-        String id_equipamento = txtIdEquipamento.getText();
+        String id_equipamento = txtIdMaq.getText();
 
         MaquinaDTO objDTO = new MaquinaDTO();
-        objDTO.setId_equipamento(Integer.parseInt(id_equipamento));
+        objDTO.setId_maquina(Integer.parseInt(id_equipamento));
 
         MaquinaDAO objEquipamentoDAO = new MaquinaDAO();
         objEquipamentoDAO.deletarEquipamento(objDTO);
     }//GEN-LAST:event_btnDeletarActionPerformed
 
-    private void txtIdPesquisarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdPesquisarKeyReleased
-        pesquisarEquipamento();
-    }//GEN-LAST:event_txtIdPesquisarKeyReleased
-
-    private void tbEquipamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbEquipamentoMouseClicked
-
-    }//GEN-LAST:event_tbEquipamentoMouseClicked
-
-    private void txtIdEquipamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdEquipamentoActionPerformed
+    private void txtIdMaqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdMaqActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdEquipamentoActionPerformed
+    }//GEN-LAST:event_txtIdMaqActionPerformed
 
     private void btnPesquisarNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarNormalActionPerformed
         pesquisarEquipamentoNormal();
@@ -384,10 +439,22 @@ public class TelaMaquina extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-         TelaPrincipal tPrincipal = new TelaPrincipal();
+        TelaPrincipal tPrincipal = new TelaPrincipal();
         tPrincipal.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void txtIdLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdLabActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdLabActionPerformed
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+       pesquisarEquipamento();
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -433,23 +500,28 @@ public class TelaMaquina extends javax.swing.JFrame {
     private javax.swing.JButton btnPesquisarNormal;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable tbEquipamento;
-    private javax.swing.JTextField txtFabricante;
-    private javax.swing.JTextField txtGarantia;
-    private javax.swing.JTextField txtIdEquipamento;
-    private javax.swing.JTextField txtIdPesquisar;
-    private javax.swing.JTextField txtModelo;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tbMaq;
+    private javax.swing.JTextField txtArmazenamento;
+    private javax.swing.JTextField txtData;
+    private javax.swing.JTextField txtIdLab;
+    private javax.swing.JTextField txtIdMaq;
     private javax.swing.JTextField txtNSerie;
+    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtProcessador;
+    private javax.swing.JTextField txtRAM;
     private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
 }
