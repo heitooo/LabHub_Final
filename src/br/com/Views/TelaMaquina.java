@@ -97,7 +97,6 @@ public void pesquisarEquipamento() {
         btnAdicionar = new javax.swing.JButton();
         btnDeletar = new javax.swing.JButton();
         txtIdMaq = new javax.swing.JTextField();
-        btnPesquisarNormal = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
@@ -161,13 +160,6 @@ public void pesquisarEquipamento() {
         txtIdMaq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdMaqActionPerformed(evt);
-            }
-        });
-
-        btnPesquisarNormal.setText("Pesquisar");
-        btnPesquisarNormal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPesquisarNormalActionPerformed(evt);
             }
         });
 
@@ -272,10 +264,8 @@ public void pesquisarEquipamento() {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtIdMaq, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
-                                .addComponent(btnPesquisarNormal)))
-                        .addGap(396, 396, 396))
+                                .addComponent(txtIdMaq, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(405, 405, 405))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnVoltar)
                         .addContainerGap())
@@ -288,12 +278,10 @@ public void pesquisarEquipamento() {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnVoltar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtIdMaq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnPesquisarNormal)))
+                    .addComponent(txtIdMaq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -414,10 +402,6 @@ public void pesquisarEquipamento() {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdMaqActionPerformed
 
-    private void btnPesquisarNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarNormalActionPerformed
-        pesquisarEquipamentoNormal();
-    }//GEN-LAST:event_btnPesquisarNormalActionPerformed
-
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         limpar();
     }//GEN-LAST:event_btnLimparActionPerformed
@@ -485,7 +469,6 @@ public void pesquisarEquipamento() {
     private javax.swing.JButton btnDeletar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnLimpar;
-    private javax.swing.JButton btnPesquisarNormal;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
