@@ -51,8 +51,7 @@ public class ManutencaoDAO {
 
     public void editar(ManutencaoDTO objDTO) {
      
-        String sql = "UPDATE manutencoes SET id_maquina = ?, data_manutencao = ?"
-                +"diagnostico = ?, solucao = ?, tecnico_responsavel = ? WHERE id_manutencao = ?";
+        String sql = "UPDATE manutencoes SET id_maquina = ?, data_manutencao = ?, diagnostico = ?, solucao = ?, tecnico_responsavel = ? WHERE id_manutencao = ?";
 
         try {
             conexao = ConexaoDAO.conector();
