@@ -47,41 +47,20 @@ public class TelaMaquina extends javax.swing.JFrame {
         }
     }
 
- public void pesquisarEquipamento() {
-    // Verifique o conteúdo do campo txtIdMaq antes de realizar a pesquisa
-    String idMaq = txtIdMaq.getText();
-    System.out.println("ID a ser pesquisada: " + idMaq); // Para debug
+public void pesquisarEquipamento() {
+        String sql = "select * from maquinas where id_maquina = ?";
 
-    if (idMaq.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Digite um ID de máquina válido.");
-        return; // Não continua se o campo estiver vazio
-    }
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtIdPesquisa.getText());
+            rs = pst.executeQuery();
 
-    try {
-        int id = Integer.parseInt(idMaq); // Tentando converter a ID para inteiro
-
-        // SQL para buscar a máquina pelo ID
-        String sql = "SELECT * FROM maquinas WHERE id_maquina = ?";
-        pst = conexao.prepareStatement(sql);
-        pst.setInt(1, id); // Definindo o parâmetro como inteiro
-
-        rs = pst.executeQuery();
-
-        // Verifica se retornou algum dado
-        if (rs.next()) {
-            System.out.println("Máquina encontrada: " + rs.getString("nome")); // Exemplo de retorno
             tbMaq.setModel(DbUtils.resultSetToTableModel(rs));
-        } else {
-            JOptionPane.showMessageDialog(null, "Máquina não encontrada com esse ID.");
-        }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "ID inválido. Digite um número.");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Erro ao pesquisar equipamento: " + e.getMessage());
-        e.printStackTrace(); // Para depuração
-    }
-}
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, " Metodo pesquisar " + e);
+        }
+    }
 
 
     public void limpar() {
@@ -129,7 +108,7 @@ public class TelaMaquina extends javax.swing.JFrame {
         txtIdLab = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbMaq = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
+        txtIdPesquisa = new javax.swing.JTextField();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -229,16 +208,21 @@ public class TelaMaquina extends javax.swing.JFrame {
                 "ID da máquina", "Nome", "Processador", "Memória RAM", "Armazenamento", "Número de série", "Data aquisição", "Status de funcionamento", "ID do laboratório"
             }
         ));
-        jScrollPane2.setViewportView(tbMaq);
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+        tbMaq.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tbMaqKeyReleased(evt);
             }
         });
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        jScrollPane2.setViewportView(tbMaq);
+
+        txtIdPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdPesquisaActionPerformed(evt);
+            }
+        });
+        txtIdPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField1KeyReleased(evt);
+                txtIdPesquisaKeyReleased(evt);
             }
         });
 
@@ -247,6 +231,18 @@ public class TelaMaquina extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(240, 240, 240)
+                .addComponent(btnAdicionar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnEditar)
+                .addGap(18, 18, 18)
+                .addComponent(btnDeletar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnLimpar)
+                .addGap(54, 54, 54)
+                .addComponent(txtIdPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -281,23 +277,11 @@ public class TelaMaquina extends javax.swing.JFrame {
                                 .addComponent(btnPesquisarNormal)))
                         .addGap(396, 396, 396))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 860, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnVoltar)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnVoltar)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 860, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(240, 240, 240)
-                .addComponent(btnAdicionar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnEditar)
-                .addGap(18, 18, 18)
-                .addComponent(btnDeletar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLimpar)
-                .addGap(54, 54, 54)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,7 +332,7 @@ public class TelaMaquina extends javax.swing.JFrame {
                     .addComponent(btnDeletar)
                     .addComponent(btnLimpar)
                     .addComponent(btnAdicionar)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIdPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(302, 302, 302))
@@ -448,13 +432,17 @@ public class TelaMaquina extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdLabActionPerformed
 
-    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-       pesquisarEquipamento();
-    }//GEN-LAST:event_jTextField1KeyReleased
+    private void txtIdPesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdPesquisaKeyReleased
+        pesquisarEquipamento();
+    }//GEN-LAST:event_txtIdPesquisaKeyReleased
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtIdPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPesquisaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtIdPesquisaActionPerformed
+
+    private void tbMaqKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbMaqKeyReleased
+       
+    }//GEN-LAST:event_tbMaqKeyReleased
 
     /**
      * @param args the command line arguments
@@ -512,12 +500,12 @@ public class TelaMaquina extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tbMaq;
     private javax.swing.JTextField txtArmazenamento;
     private javax.swing.JTextField txtData;
     private javax.swing.JTextField txtIdLab;
     private javax.swing.JTextField txtIdMaq;
+    private javax.swing.JTextField txtIdPesquisa;
     private javax.swing.JTextField txtNSerie;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtProcessador;
